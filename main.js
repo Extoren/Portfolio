@@ -1,6 +1,6 @@
 let scene = new THREE.Scene();
 let camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-let renderer = new THREE.WebGLRenderer();
+let renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
@@ -11,24 +11,27 @@ window.addEventListener('resize', function () {
   renderer.setSize(window.innerWidth, window.innerHeight);
 });
 
-let objLoader = new THREE.OBJLoader();
+let gltfLoader = new THREE.GLTFLoader();
 let houseMesh;
 
-objLoader.load(
-  'Portfolio 2.0 English.obj',
-  function (object) {
-    object.scale.set(0.05, 0.05, 0.05);
-    scene.add(object);
-    houseMesh = object.children[0]; // assuming the house is the first child object
-  }
+gltfLoader.load(
+  'Portfolio 2.0 English.glb',
+  function (gltf) {
+    houseMesh = gltf.scene;
+    houseMesh.scale.set(0.05, 0.05, 0.05);
+    scene.add(houseMesh);
+  },
 );
 
+
+
 //bare for lys
-var ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+var ambientLight = new THREE.AmbientLight(0xffffff, 1);
+ambientLight.position.set(0, 1000, 500);
 scene.add(ambientLight);
 
-var pointLight = new THREE.PointLight(0xffffff, 0.2);
-pointLight.position.set(0, 0, 100);
+var pointLight = new THREE.PointLight(0xffffff, 2);
+pointLight.position.set(0, 00, -0);
 scene.add(pointLight);
 
 
@@ -139,6 +142,7 @@ function lockPointer() {
       mouseLocked = false;
     }
   }
+
 
   var cameraOrientation = new THREE.Vector3(0, 0, -1);
 var zoomSpeed = 0.1; // Adjust this value to change the speed of the zoom
