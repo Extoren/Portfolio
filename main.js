@@ -12,16 +12,58 @@ window.addEventListener('resize', function () {
 });
 
 let gltfLoader = new THREE.GLTFLoader();
-let houseMesh;
+// define a variable to hold the child object
+var screenMesh;
 
+// load the house glb file
 gltfLoader.load(
   'Portfolio 2.0 English.glb',
   function (gltf) {
     houseMesh = gltf.scene;
     houseMesh.scale.set(0.05, 0.05, 0.05);
+
+    // load the screen glb file
+    gltfLoader.load(
+      'Screen 1.3.glb',
+      function (gltf) {
+        screenMesh = gltf.scene;
+        screenMesh.scale.set(0.92, 0.92, 0.92);
+
+        // add the screen as a child of the house
+        houseMesh.add(screenMesh);
+
+        // set the position of the screen relative to the house
+        screenMesh.position.set(0, 2, -3);
+      },
+    );
+
     scene.add(houseMesh);
   },
 );
+
+// define a function to set the color of the child object
+function setColor() {
+  // generate random RGB values
+  var r = Math.random();
+  var g = Math.random();
+  var b = Math.random();
+
+  // set the color of the child object
+  if (screenMesh) {
+    screenMesh.traverse(function (node) {
+      if (node.isMesh) {
+        node.material.color.setRGB(r, g, b);
+      }
+    });
+  }
+}
+
+// call setColor every second
+setInterval(setColor, 1000);
+
+
+
+
 
 
 
@@ -192,5 +234,3 @@ document.addEventListener('wheel', onMouseWheel, false);
 
 }
 lockPointer ();
-
-
