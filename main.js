@@ -11,9 +11,19 @@ window.addEventListener('resize', function () {
   renderer.setSize(window.innerWidth, window.innerHeight);
 });
 
+
+
 let gltfLoader = new THREE.GLTFLoader();
-// define a variable to hold the child object
-var screenMesh;
+let houseMesh;
+let screenMesh;
+const raycaster = new THREE.Raycaster();
+const cubeGeometry = new THREE.BoxGeometry();
+const cubeMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000 });
+const cubeMesh = new THREE.Mesh(cubeGeometry, cubeMaterial);
+cubeMesh.position.set(-0, 1, -2.5);
+scene.add(cubeMesh);
+
+const parent = new THREE.Object3D();
 
 // load the house glb file
 gltfLoader.load(
@@ -24,42 +34,43 @@ gltfLoader.load(
 
     // load the screen glb file
     gltfLoader.load(
-      'Screen 1.3.glb',
+      'Screen 1.glb',
       function (gltf) {
         screenMesh = gltf.scene;
-        screenMesh.scale.set(0.92, 0.92, 0.92);
+        screenMesh.scale.set(0.05, 0.05, 0.05);
 
-        // add the screen as a child of the house
-        houseMesh.add(screenMesh);
+        // add the screen as a child of the parent
+        parent.add(screenMesh);
+
+        // add the house as a child of the parent
+        parent.add(houseMesh);
 
         // set the position of the screen relative to the house
-        screenMesh.position.set(0, 2, -3);
+        screenMesh.position.set(0, 0, -0);
       },
     );
-
-    scene.add(houseMesh);
   },
 );
 
-// define a function to set the color of the child object
-function setColor() {
-  // generate random RGB values
-  var r = Math.random();
-  var g = Math.random();
-  var b = Math.random();
+scene.add(parent);
 
-  // set the color of the child object
-  if (screenMesh) {
-    screenMesh.traverse(function (node) {
-      if (node.isMesh) {
-        node.material.color.setRGB(r, g, b);
-      }
-    });
+function onDocumentMouseDown(event) {
+  raycaster.far = 100;
+  event.preventDefault();
+  raycaster.setFromCamera({ x: (event.clientX / window.innerWidth) * 2 - 1, y: -(event.clientY / window.innerHeight) * 2 + 1 }, camera);
+  const intersects = raycaster.intersectObjects([houseMesh, screenMesh, cubeMesh, ...houseMesh.children]);
+  if (intersects.length > 0) {
+    intersects[0].object.material.color.setHex(Math.random() * 0xffffff);
+    if (intersects[0].object == screenMesh) {
+      screenMesh.children.forEach(function (child) {
+        child.material.color.setHex(Math.random() * 0xffffff);
+      });
+    }
   }
+  console.log(screenMesh.children);
 }
 
-// call setColor every second
-setInterval(setColor, 1000);
+document.addEventListener('mousedown', onDocumentMouseDown, false);
 
 
 
@@ -68,12 +79,8 @@ setInterval(setColor, 1000);
 
 
 //bare for lys
-var ambientLight = new THREE.AmbientLight(0xffffff, 1);
-ambientLight.position.set(0, 1000, 500);
-scene.add(ambientLight);
-
-var pointLight = new THREE.PointLight(0xffffff, 2);
-pointLight.position.set(0, 00, -0);
+var pointLight = new THREE.PointLight(0xffffff, 0.5);
+pointLight.position.set(0, 2, -0);
 scene.add(pointLight);
 
 
@@ -162,13 +169,12 @@ animate();
 
 
 
-// mus locker
 function lockPointer() {
-  var pointerLockElement = document.getElementById('pointer-lock');
+  var customCircle = document.getElementById('custom-circle');
 
-  pointerLockElement.addEventListener('click', function() {
-    pointerLockElement.requestPointerLock = pointerLockElement.requestPointerLock || pointerLockElement.mozRequestPointerLock || pointerLockElement.webkitRequestPointerLock;
-    pointerLockElement.requestPointerLock();
+  customCircle.addEventListener('mousedown', function(event) {
+    event.stopPropagation();
+    document.body.requestPointerLock();
   }, false);
 
   document.addEventListener('pointerlockchange', onPointerLockChange, false);
@@ -176,7 +182,7 @@ function lockPointer() {
   document.addEventListener('webkitpointerlockchange', onPointerLockChange, false);
 
   function onPointerLockChange() {
-    if (document.pointerLockElement === pointerLockElement || document.mozPointerLockElement === pointerLockElement || document.webkitPointerLockElement === pointerLockElement) {
+    if (document.pointerLockElement === document.body || document.mozPointerLockElement === document.body || document.webkitPointerLockElement === document.body) {
       document.addEventListener('mousemove', onMouseMove, false);
       mouseLocked = true;
     } else {
@@ -185,27 +191,35 @@ function lockPointer() {
     }
   }
 
-
-  var cameraOrientation = new THREE.Vector3(0, 0, -1);
-var zoomSpeed = 0.1; // Adjust this value to change the speed of the zoom
-
-function onMouseMove(event) {
-  var movementX = event.movementX || event.mozMovementX || event.webkitMovementX || 0;
-  var movementY = event.movementY || event.mozMovementY || event.webkitMovementY || 0;
-
-  if (mouseLocked) {
-    // Calculate the new rotation angles and position for the camera based on mouse movements
-    var rotationX = new THREE.Matrix4().makeRotationAxis(new THREE.Vector3(1, 0, 0), -movementY * 0.002);
-    var rotationY = new THREE.Matrix4().makeRotationAxis(new THREE.Vector3(0, 1, 0), -movementX * 0.002);
-    var rotationZ = new THREE.Matrix4().makeRotationAxis(new THREE.Vector3().crossVectors(cameraOrientation, camera.up), -movementY * 0.002);
-
-    cameraOrientation.applyMatrix4(rotationX);
-    cameraOrientation.applyMatrix4(rotationY);
-    cameraOrientation.applyMatrix4(rotationZ);
-
-    camera.lookAt(camera.position.clone().add(cameraOrientation));
+  function onMouseMove(event) {
+    var movementX = event.movementX || event.mozMovementX || event.webkitMovementX || 0;
+    var movementY = event.movementY || event.mozMovementY || event.webkitMovementY || 0;
+  
+    if (mouseLocked) {
+      var crosshair = document.getElementById('custom-crosshair');
+      var crosshairRect = crosshair.getBoundingClientRect();
+      var centerX = crosshairRect.left + crosshairRect.width / 2;
+      var centerY = crosshairRect.top + crosshairRect.height / 2;
+      var distance = Math.sqrt(Math.pow(event.clientX - centerX, 2) + Math.pow(event.clientY - centerY, 2));
+  
+      if (distance <= crosshairRect.width / 2) {
+        var rotationX = new THREE.Matrix4().makeRotationAxis(new THREE.Vector3(1, 0, 0), -movementY * 0.002);
+        var rotationY = new THREE.Matrix4().makeRotationAxis(new THREE.Vector3(0, 1, 0), -movementX * 0.002);
+        var rotationZ = new THREE.Matrix4().makeRotationAxis(new THREE.Vector3().crossVectors(cameraOrientation, camera.up), -movementY * 0.002);
+  
+        cameraOrientation.applyMatrix4(rotationX);
+        cameraOrientation.applyMatrix4(rotationY);
+        cameraOrientation.applyMatrix4(rotationZ);
+  
+        camera.lookAt(camera.position.clone().add(cameraOrientation));
+      }
+    }
   }
-}
+  
+
+
+
+
 
 
 //zoom function
@@ -234,3 +248,5 @@ document.addEventListener('wheel', onMouseWheel, false);
 
 }
 lockPointer ();
+
+

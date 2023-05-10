@@ -15,10 +15,39 @@
         canvas {
           display: block;
         }
+        #custom-crosshair {
+          position: fixed;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          width: 20px;
+          height: 20px;
+          pointer-events: none;
+        }
+
+        #custom-crosshair #custom-circle {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          width: 12px;
+          height: 12px;
+          border-radius: 50%;
+          border: 3px solid yellow;
+          
+          pointer-events: auto;
+        }
+        
+
+
+
       </style>
 </head>
 <body>
-    <div id="pointer-lock" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%;"></div>
+  <div id="custom-crosshair">
+    <div id="custom-circle"></div>
+  </div>
+  
     <script src="https://cdn.rawgit.com/mrdoob/three.js/r118/build/three.min.js"></script>
     <script src="https://threejs.org/examples/js/loaders/ColladaLoader.js"></script>
     <script src="https://cdn.rawgit.com/mrdoob/three.js/r118/examples/js/loaders/OBJLoader.js"></script>
