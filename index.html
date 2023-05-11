@@ -37,8 +37,57 @@
           
           pointer-events: auto;
         }
-        
+        #overlay {
+          position: fixed;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%) scale(0.1);
+          transform-origin: center center;
+          width: 1500px;
+          height: 700px;
+          background-color: rgb(20, 20, 20);
+          z-index: 100;
+          display: none;
+          opacity: 1;
+          border-radius: 5px;
+          border: 5px solid yellow;
+          transition: all 0.3s ease-out;
+        }
+        h1 {
+          color: white;
+          font-size: 15pt;
+          text-align: center;
+          font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+        }
+        h2 {
+          color: yellow;
+          font-size: 100pt;
+          text-align: center;
+          font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+        }
+        p {
+          color: yellow;
+          font-size: 65pt;
+          text-align: center;
+          font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+        }
+        #yellow {
+          color: yellow;
+        }
+        .close-btn {
+          position: absolute;
+          top: 10px;
+          left: 30px;
+          font-size: 40pt;
+          background-color: transparent;
+          border: none;
+          color: yellow;
+          cursor: pointer;
+        }
 
+        #popup-material-003 {
+          position: relative;
+        }
 
 
       </style>
@@ -47,7 +96,30 @@
   <div id="custom-crosshair">
     <div id="custom-circle"></div>
   </div>
-  
+  <div id="overlay">
+    <div id="popup-material-003">
+      <button class="close-btn">x</button>
+      <h1>Press <span id="yellow">ESC</span> to toggle mouse</h1>
+      <h2>Born</h2>
+      <p>2006</p>
+    </div>
+    
+    <div id="popup-material-0031">
+      <button class="close-btn">x</button>
+      <h1>Press <span id="yellow">ESC</span> to toggle mouse</h1>
+      <h2>Studying</h2>
+      <p>Information-technology <br>
+        and media-production.</p>
+    </div>
+
+    <div id="popup-material-0032">
+      <button class="close-btn">x</button>
+      <h1>Press <span id="yellow">ESC</span> to toggle mouse</h1>
+      <h2>Location</h2>
+      <p>Norway, Oslo</p>
+    </div>
+  </div>  
+  <div id="container"></div>
     <script src="https://cdn.rawgit.com/mrdoob/three.js/r118/build/three.min.js"></script>
     <script src="https://threejs.org/examples/js/loaders/ColladaLoader.js"></script>
     <script src="https://cdn.rawgit.com/mrdoob/three.js/r118/examples/js/loaders/OBJLoader.js"></script>

@@ -17,12 +17,6 @@ let gltfLoader = new THREE.GLTFLoader();
 let houseMesh;
 let screenMesh;
 const raycaster = new THREE.Raycaster();
-const cubeGeometry = new THREE.BoxGeometry();
-const cubeMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000 });
-const cubeMesh = new THREE.Mesh(cubeGeometry, cubeMaterial);
-cubeMesh.position.set(-0, 1, -2.5);
-scene.add(cubeMesh);
-
 const parent = new THREE.Object3D();
 
 // load the house glb file
@@ -46,7 +40,7 @@ gltfLoader.load(
         parent.add(houseMesh);
 
         // set the position of the screen relative to the house
-        screenMesh.position.set(0, 0, -0);
+        screenMesh.position.set(0, -4, -0);
       },
     );
   },
@@ -54,27 +48,69 @@ gltfLoader.load(
 
 scene.add(parent);
 
+const overlay = document.querySelector("#overlay");
+const closeBtns = document.querySelectorAll(".close-btn");
+
+closeBtns.forEach((closeBtn) => {
+  closeBtn.addEventListener("click", () => {
+    overlay.style.display = "none";
+  });
+});
+
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape") {
+    overlay.style.display = "none";
+  }
+});
+
+
+
+
 function onDocumentMouseDown(event) {
   raycaster.far = 100;
   event.preventDefault();
   raycaster.setFromCamera({ x: (event.clientX / window.innerWidth) * 2 - 1, y: -(event.clientY / window.innerHeight) * 2 + 1 }, camera);
-  const intersects = raycaster.intersectObjects([houseMesh, screenMesh, cubeMesh, ...houseMesh.children]);
-  if (intersects.length > 0) {
-    intersects[0].object.material.color.setHex(Math.random() * 0xffffff);
-    if (intersects[0].object == screenMesh) {
-      screenMesh.children.forEach(function (child) {
-        child.material.color.setHex(Math.random() * 0xffffff);
-      });
+  const intersects = raycaster.intersectObjects(scene.children, true);
+  intersects.forEach((intersect) => {
+    if (intersect.object.material.name === 'Material.003') {
+      overlay.style.display = 'block';
+      document.getElementById('popup-material-003').style.display = 'block';
+      setTimeout(function() {
+        overlay.style.transform = 'translate(-50%, -50%) scale(1)';
+      }, 10);
+    } else if (intersect.object.material.name === 'Material.0031') {
+      overlay.style.display = 'block';
+      document.getElementById('popup-material-0031').style.display = 'block';
+      setTimeout(function() {
+        overlay.style.transform = 'translate(-50%, -50%) scale(1)';
+      }, 10);
+    } else if (intersect.object.material.name === 'Material.0032') {
+      overlay.style.display = 'block';
+      document.getElementById('popup-material-0032').style.display = 'block';
+      setTimeout(function() {
+        overlay.style.transform = 'translate(-50%, -50%) scale(1)';
+      }, 10);
     }
-  }
-  console.log(screenMesh.children);
+  });
 }
 
+document.addEventListener('mousedown', function(event) {
+  const isInsidePopup003 = event.target.closest('#popup-material-003') !== null;
+  const isInsidePopup004 = event.target.closest('#popup-material-0031') !== null;
+  const isInsidePopup005 = event.target.closest('#popup-material-0032') !== null;
+  if (!isInsidePopup003 && !isInsidePopup004 && !isInsidePopup005) {
+    overlay.style.display = 'none';
+    document.getElementById('popup-material-003').style.display = 'none';
+    document.getElementById('popup-material-0031').style.display = 'none';
+    document.getElementById('popup-material-0032').style.display = 'none';
+    overlay.style.transform = 'translate(-50%, -50%) scale(0.1)';
+  }
+});
+
+
+
+
 document.addEventListener('mousedown', onDocumentMouseDown, false);
-
-
-
-
 
 
 
@@ -222,23 +258,23 @@ function lockPointer() {
 
 
 
-//zoom function
+//zoom funksjon
 var cameraOrientation = new THREE.Vector3(0, 0, -1);
 var zoomSpeed = 0.1;
-var maxZoom = 2; // The maximum allowed zoom level
-var minZoom = 1; // The minimum allowed zoom level
+var maxZoom = 2; // Maksimalt tillatt zoomnivå
+var minZoom = 1; // Minimum tillatt zoomnivå
 
 function onMouseWheel(event) {
   var zoomDelta = event.deltaY > 0 ? -1 : 1;
   var zoomAmount = zoomDelta * zoomSpeed;
 
-  // Check if the new zoom level is within the allowed range
+  // Sjekk om det nye zoomnivået er innenfor det tillatte området
   var newZoom = camera.zoom + zoomAmount;
   if (newZoom > maxZoom || newZoom < minZoom) {
-    return; // Do not update the zoom level if it's outside the allowed range
+    return; // Ikke oppdater zoomnivået hvis det er utenfor det tillatte området
   }
 
-  // Update the camera's zoom level and projection matrix
+  // Oppdater kameraets zoomnivå og projeksjonsmatrise
   camera.zoom = newZoom;
   camera.updateProjectionMatrix();
 }
