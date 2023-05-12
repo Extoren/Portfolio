@@ -78,21 +78,37 @@ function onDocumentMouseDown(event) {
       setTimeout(function() {
         overlay.style.transform = 'translate(-50%, -50%) scale(1)';
       }, 10);
+      // Check if pointer lock is active
+      if (document.pointerLockElement !== null) {
+        // Exit pointer lock
+        document.exitPointerLock();
+      }
     } else if (intersect.object.material.name === 'Material.0031') {
       overlay.style.display = 'block';
       document.getElementById('popup-material-0031').style.display = 'block';
       setTimeout(function() {
         overlay.style.transform = 'translate(-50%, -50%) scale(1)';
       }, 10);
+      // Check if pointer lock is active
+      if (document.pointerLockElement !== null) {
+        // Exit pointer lock
+        document.exitPointerLock();
+      }
     } else if (intersect.object.material.name === 'Material.0032') {
       overlay.style.display = 'block';
       document.getElementById('popup-material-0032').style.display = 'block';
       setTimeout(function() {
         overlay.style.transform = 'translate(-50%, -50%) scale(1)';
       }, 10);
+      // Check if pointer lock is active
+      if (document.pointerLockElement !== null) {
+        // Exit pointer lock
+        document.exitPointerLock();
+      }
     }
   });
 }
+
 
 document.addEventListener('mousedown', function(event) {
   const isInsidePopup003 = event.target.closest('#popup-material-003') !== null;
@@ -108,14 +124,23 @@ document.addEventListener('mousedown', function(event) {
 });
 
 
-
+// Add event listener to the overlay
+overlay.addEventListener('click', function(event) {
+  // Check if the clicked element is a close button
+  if (event.target.classList.contains('button')) {
+    // Exit pointer lock
+    document.exitLockPointer();
+    // Hide the overlay
+    overlay.style.display = 'none';
+  }
+});
 
 document.addEventListener('mousedown', onDocumentMouseDown, false);
 
 
 
 //bare for lys
-var pointLight = new THREE.PointLight(0xffffff, 0.5);
+var pointLight = new THREE.PointLight(0xffffff, 2);
 pointLight.position.set(0, 2, -0);
 scene.add(pointLight);
 
@@ -284,5 +309,40 @@ document.addEventListener('wheel', onMouseWheel, false);
 
 }
 lockPointer ();
+
+
+const popup003 = document.getElementById("popup-material-003");
+const popup0031 = document.getElementById("popup-material-0032");
+const popup0032 = document.getElementById("popup-material-0031");
+const arrowLeft = document.querySelector(".arrow-left");
+const arrowRight = document.querySelector(".arrow-right");
+const back = document.getElementById("back");
+const forward = document.getElementById("forward");
+
+arrowLeft.addEventListener("click", () => {
+  popup003.style.display = "none";
+  popup0032.style.display = "block";
+  overlay.classList.add("active");
+});
+
+arrowRight.addEventListener("click", () => {
+  popup003.style.display = "none";
+  popup0031.style.display = "block";
+  overlay.classList.add("active");
+});
+
+back.addEventListener("click", () => {
+  popup0032.style.display = "none";
+  popup0031.style.display = "none";
+  popup003.style.display = "block";
+  overlay.classList.remove("active");
+});
+
+forward.addEventListener("click", () => {
+  popup0031.style.display = "none";
+  popup0032.style.display = "none";
+  popup003.style.display = "block";
+  overlay.classList.remove("active");
+});
 
 

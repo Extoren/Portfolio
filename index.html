@@ -53,6 +53,48 @@
           border: 5px solid yellow;
           transition: all 0.3s ease-out;
         }
+        @media (max-width: 500px) {
+            #overlay {
+              width: 400px;
+              height:700px;
+            }
+        }
+        @media (min-width: 530px) {
+            #overlay {
+              width: 450px;
+              height:700px;
+            }
+        }
+        @media (min-width: 550px) {
+            #overlay {
+              width: 450px;
+              height:700px;
+            }
+        }
+        @media (min-width: 600px) {
+            #overlay {
+              width: 500px;
+              height:700px;
+            }
+        }
+        @media (min-width: 800px) {
+            #overlay {
+              width: 600px;
+              height:700px;
+            }
+        }
+        @media (min-width: 900px) {
+            #overlay {
+              width: 800px;
+              height:700px;
+            }
+        }
+        @media (min-width:1200px){  
+          #overlay {
+            width:1200px;
+            height:600px;
+          }
+        }
         h1 {
           color: white;
           font-size: 15pt;
@@ -76,7 +118,7 @@
         }
         .close-btn {
           position: absolute;
-          top: 10px;
+          top: -100px;
           left: 30px;
           font-size: 40pt;
           background-color: transparent;
@@ -88,8 +130,34 @@
         #popup-material-003 {
           position: relative;
         }
+        #control {
+          top: 10px;
+        }
+        #smallerT {
+          font-size: 40pt;
+        }
+        #smallerH {
+          font-size: 65pt;
+        }
+        .arrow-left,
+        .arrow-right {
+          position: absolute;
+          top: 50%;
+          width: 40px;
+          height: 80px;
+          margin-top: -10px;
+          background-color: yellow;
+          z-index: 1;
+        }
+        .arrow-left {
+          left: 10px;
+          clip-path: polygon(100% 0, 0 50%, 100% 100%);
+        }
 
-
+        .arrow-right {
+          right: 10px;
+          clip-path: polygon(0 0, 100% 50%, 0 100%);
+        }
       </style>
 </head>
 <body>
@@ -99,23 +167,24 @@
   <div id="overlay">
     <div id="popup-material-003">
       <button class="close-btn">x</button>
-      <h1>Press <span id="yellow">ESC</span> to toggle mouse</h1>
+      <div class="arrow-left"></div>
+      <div class="arrow-right"></div>
       <h2>Born</h2>
       <p>2006</p>
     </div>
     
     <div id="popup-material-0031">
-      <button class="close-btn">x</button>
-      <h1>Press <span id="yellow">ESC</span> to toggle mouse</h1>
-      <h2>Studying</h2>
-      <p>Information-technology <br>
+      <button class="close-btn" id="control">x</button>
+      <div class="arrow-right" id="forward"></div>
+      <h2 id="smallerH">Studying</h2>
+      <p id="smallerT">Information-technology <br>
         and media-production.</p>
     </div>
 
     <div id="popup-material-0032">
-      <button class="close-btn">x</button>
-      <h1>Press <span id="yellow">ESC</span> to toggle mouse</h1>
-      <h2>Location</h2>
+      <button class="close-btn" id="control">x</button>
+      <div class="arrow-left" id="back"></div>
+      <h2 id="smallerH">Location</h2>
       <p>Norway, Oslo</p>
     </div>
   </div>  
