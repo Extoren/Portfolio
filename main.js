@@ -28,10 +28,10 @@ gltfLoader.load(
 
     // load the screen glb file
     gltfLoader.load(
-      'Screen 1.glb',
+      'Face/Face.glb',
       function (gltf) {
         screenMesh = gltf.scene;
-        screenMesh.scale.set(0.05, 0.05, 0.05);
+        screenMesh.scale.set(0.15, 0.15, 0.15);
 
         // add the screen as a child of the parent
         parent.add(screenMesh);
@@ -40,11 +40,45 @@ gltfLoader.load(
         parent.add(houseMesh);
 
         // set the position of the screen relative to the house
-        screenMesh.position.set(0, -4, -0);
+        screenMesh.position.set(0, 0.8, -1.75);
+
+        // create a vector to store the camera's position
+        var cameraPosition = new THREE.Vector3();
+
+        // create a quaternion to store the rotation of the screen
+        var screenRotation = new THREE.Quaternion();
+
+        // render loop to update the screen rotation based on the camera's position
+        function render() {
+          requestAnimationFrame(render);
+
+          // get the camera's position
+          cameraPosition.copy(camera.position);
+
+          // set the screen to look at the camera
+          screenMesh.lookAt(cameraPosition);
+
+          // get the rotation of the screen
+          screenRotation.copy(screenMesh.quaternion);
+
+          // update the rotation of the screen relative to the house
+          screenRotation.multiply(houseMesh.quaternion);
+
+          // set the rotation of the screen
+          screenMesh.setRotationFromQuaternion(screenRotation);
+
+          // render the scene
+          renderer.render(scene, camera);
+        }
+
+        // start the render loop
+        render();
       },
     );
   },
 );
+
+
 
 scene.add(parent);
 
@@ -140,8 +174,8 @@ document.addEventListener('mousedown', onDocumentMouseDown, false);
 
 
 //bare for lys
-var pointLight = new THREE.PointLight(0xffffff, 2);
-pointLight.position.set(0, 2, -0);
+var pointLight = new THREE.PointLight(0xffffff, 1);
+pointLight.position.set(0, 0.6, -1.40);
 scene.add(pointLight);
 
 
