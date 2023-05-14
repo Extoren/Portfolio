@@ -21,17 +21,17 @@ const parent = new THREE.Object3D();
 
 // load the house glb file
 gltfLoader.load(
-  'Portfolio 2.0 English.glb',
+  'Portfolio 2.glb',
   function (gltf) {
     houseMesh = gltf.scene;
-    houseMesh.scale.set(0.05, 0.05, 0.05);
+    houseMesh.scale.set(0.85, 0.90, 0.80);
 
     // load the screen glb file
     gltfLoader.load(
       'Face/Face.glb',
       function (gltf) {
         screenMesh = gltf.scene;
-        screenMesh.scale.set(0.15, 0.15, 0.15);
+        screenMesh.scale.set(0.10, 0.10, 0.10);
 
         // add the screen as a child of the parent
         parent.add(screenMesh);
@@ -40,7 +40,7 @@ gltfLoader.load(
         parent.add(houseMesh);
 
         // set the position of the screen relative to the house
-        screenMesh.position.set(0, 0.8, -1.75);
+        screenMesh.position.set(0, 0.6, -1.50);
 
         // create a vector to store the camera's position
         var cameraPosition = new THREE.Vector3();
@@ -106,7 +106,7 @@ function onDocumentMouseDown(event) {
   raycaster.setFromCamera({ x: (event.clientX / window.innerWidth) * 2 - 1, y: -(event.clientY / window.innerHeight) * 2 + 1 }, camera);
   const intersects = raycaster.intersectObjects(scene.children, true);
   intersects.forEach((intersect) => {
-    if (intersect.object.material.name === 'Material.003') {
+    if (intersect.object.material.name === 'Glass') {
       overlay.style.display = 'block';
       document.getElementById('popup-material-003').style.display = 'block';
       setTimeout(function() {
@@ -117,7 +117,7 @@ function onDocumentMouseDown(event) {
         // Exit pointer lock
         document.exitPointerLock();
       }
-    } else if (intersect.object.material.name === 'Material.0031') {
+    } else if (intersect.object.material.name === 'Glass.001') {
       overlay.style.display = 'block';
       document.getElementById('popup-material-0031').style.display = 'block';
       setTimeout(function() {
@@ -128,7 +128,7 @@ function onDocumentMouseDown(event) {
         // Exit pointer lock
         document.exitPointerLock();
       }
-    } else if (intersect.object.material.name === 'Material.0032') {
+    } else if (intersect.object.material.name === 'Glass.002') {
       overlay.style.display = 'block';
       document.getElementById('popup-material-0032').style.display = 'block';
       setTimeout(function() {
@@ -174,9 +174,10 @@ document.addEventListener('mousedown', onDocumentMouseDown, false);
 
 
 //bare for lys
-var pointLight = new THREE.PointLight(0xffffff, 1);
-pointLight.position.set(0, 0.6, -1.40);
+var pointLight = new THREE.PointLight(0xffff00, 1.0);
+pointLight.position.set(0, 0.6, -1.20);
 scene.add(pointLight);
+
 
 
 camera.position.z = 0; //How close
@@ -378,5 +379,11 @@ forward.addEventListener("click", () => {
   popup003.style.display = "block";
   overlay.classList.remove("active");
 });
+
+
+
+
+
+
 
 
