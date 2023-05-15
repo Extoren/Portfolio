@@ -199,8 +199,8 @@ scene.add(pointLight);
 
 
 // Define the minimum and maximum x-axis values that the camera can move within
-const MIN_X = -3;
-const MAX_X = 3;
+const MIN_X = -6;
+const MAX_X = 6;
 
 // Set the initial camera position
 camera.position.z = 0; // How close
