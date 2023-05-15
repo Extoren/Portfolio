@@ -21,7 +21,7 @@ const parent = new THREE.Object3D();
 
 // load the house glb file
 gltfLoader.load(
-  'Portfolio 2.glb',
+  'Portfolio 2.3.glb',
   function (gltf) {
     houseMesh = gltf.scene;
     houseMesh.scale.set(0.85, 0.90, 0.80);
@@ -174,25 +174,55 @@ document.addEventListener('mousedown', onDocumentMouseDown, false);
 
 
 //bare for lys
-var pointLight = new THREE.PointLight(0xffffff, 2.0);
-pointLight.position.set(6, 2, 0);
-scene.add(pointLight);
-
-var pointLight = new THREE.PointLight(0xffffff, 0.5);
-pointLight.position.set(3, 2, 0);
-scene.add(pointLight);
-
 var pointLight = new THREE.PointLight(0xffffff, 0.5);
 pointLight.position.set(0, 2, 0);
 scene.add(pointLight);
 
-var pointLight = new THREE.PointLight(0xffffff, 0.5);
-pointLight.position.set(-3, 2, 0);
+var pointLight = new THREE.PointLight(0xffffff, 0);
+pointLight.position.set(5, 2, 0);
 scene.add(pointLight);
 
-var pointLight = new THREE.PointLight(0xffffff, 2.0);
-pointLight.position.set(-6, 2, 0);
+var pointLight = new THREE.PointLight(0xffffff, 0);
+pointLight.position.set(-5, 2, 0);
 scene.add(pointLight);
+
+var pointLight = new THREE.PointLight(0xffffff, 0);
+pointLight.position.set(5, 2, 0);
+scene.add(pointLight);
+
+var targetIntensity = 2; // The desired final intensity of the light
+var currentIntensity = 0; // The current intensity of the light
+var intensityIncrement = 0.01; // The amount by which the intensity increases in each frame
+var duration = 25000; // The total duration over which the light intensity increases (in milliseconds)
+var frameInterval = 16; // The interval between frames (in milliseconds)
+
+var startTime = Date.now(); // The timestamp when the animation starts
+
+function updateLightIntensity() {
+  var elapsed = Date.now() - startTime; // The elapsed time since the animation started
+  var progress = Math.min(elapsed / duration, 1); // The progress of the animation from 0 to 1
+  currentIntensity = progress * targetIntensity; // Calculate the current intensity based on the progress
+  
+  pointLight.intensity = currentIntensity; // Set the current intensity to the light
+
+  if (progress < 1) {
+    setTimeout(updateLightIntensity, frameInterval); // Schedule the next frame update
+  }
+}
+
+updateLightIntensity(); // Start the animation
+
+function animate2() {
+  requestAnimationFrame(animate);
+  renderer.render(scene, camera);
+}
+
+animate2();
+
+
+
+
+
 
 
 
