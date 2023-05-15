@@ -31,7 +31,7 @@ gltfLoader.load(
       'Face/Face.glb',
       function (gltf) {
         screenMesh = gltf.scene;
-        screenMesh.scale.set(0.10, 0.10, 0.10);
+        screenMesh.scale.set(0.00, 0.00, 0.00);
 
         // add the screen as a child of the parent
         parent.add(screenMesh);
@@ -174,16 +174,38 @@ document.addEventListener('mousedown', onDocumentMouseDown, false);
 
 
 //bare for lys
-var pointLight = new THREE.PointLight(0xffff00, 1.0);
-pointLight.position.set(0, 0.6, -1.20);
+var pointLight = new THREE.PointLight(0xffffff, 2.0);
+pointLight.position.set(6, 2, 0);
+scene.add(pointLight);
+
+var pointLight = new THREE.PointLight(0xffffff, 0.5);
+pointLight.position.set(3, 2, 0);
+scene.add(pointLight);
+
+var pointLight = new THREE.PointLight(0xffffff, 0.5);
+pointLight.position.set(0, 2, 0);
+scene.add(pointLight);
+
+var pointLight = new THREE.PointLight(0xffffff, 0.5);
+pointLight.position.set(-3, 2, 0);
+scene.add(pointLight);
+
+var pointLight = new THREE.PointLight(0xffffff, 2.0);
+pointLight.position.set(-6, 2, 0);
 scene.add(pointLight);
 
 
 
-camera.position.z = 0; //How close
-camera.position.y = 1; //Up and down
-camera.position.x = 0; //right or left
 
+
+// Define the minimum and maximum x-axis values that the camera can move within
+const MIN_X = -3;
+const MAX_X = 3;
+
+// Set the initial camera position
+camera.position.z = 0; // How close
+camera.position.y = 1; // Up and down
+camera.position.x = 0; // Right or left
 
 let moveForward = false;
 let moveBackward = false;
@@ -191,6 +213,9 @@ let moveLeft = false;
 let moveRight = false;
 let cameraX = 0;
 let cameraZ = 0;
+
+// Define the speed at which the camera moves
+const CAMERA_SPEED = 0.1;
 
 function onKeyDown(event) {
   switch (event.keyCode) {
@@ -201,12 +226,10 @@ function onKeyDown(event) {
       moveBackward = true;
       break;
     case 68: // A
-      moveLeft = true;
-      camera.position.x -= 1; // flytt kameraet til venstre langs x-aksen
+      moveRight = true;
       break;
     case 65: // D
-      moveRight = true;
-      camera.position.x += 1; // flytt kameraet til høyre langs x-aksen
+      moveLeft = true;
       break;
   }
 }
@@ -220,13 +243,37 @@ function onKeyUp(event) {
       moveBackward = false;
       break;
     case 68: // A
-      moveLeft = false;
+      moveRight = false;
       break;
     case 65: // D
-      moveRight = false;
+      moveLeft = false;
       break;
   }
 }
+
+function updateCameraPosition() {
+  // Calculate the new camera position based on user input
+  if (moveLeft && cameraX > MIN_X) {
+    cameraX -= CAMERA_SPEED;
+  }
+  if (moveRight && cameraX < MAX_X) {
+    cameraX += CAMERA_SPEED;
+  }
+
+  // Apply the limits to the camera position
+  cameraX = Math.max(Math.min(cameraX, MAX_X), MIN_X);
+
+  // Smoothly update the camera position using requestAnimationFrame
+  camera.position.x += (cameraX - camera.position.x) * 0.1;
+
+  // Request the next frame
+  requestAnimationFrame(updateCameraPosition);
+}
+
+
+// Start the update loop
+requestAnimationFrame(updateCameraPosition);
+
 
 function animate() {
   requestAnimationFrame(animate);
@@ -259,8 +306,6 @@ document.addEventListener('keydown', onKeyDown, false);
 document.addEventListener('keyup', onKeyUp, false);
 
 animate();
-
-
 
 
 
