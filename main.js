@@ -211,20 +211,21 @@ scene.add(pointLight0);
 
 
 // Set the proximity threshold for triggering the action
-var proximityThreshold = 6; // Adjust this value as needed
+let proximityThreshold = 6; // Adjust this value as needed
 
 // Set the movement speed for the smooth transition
-var movementSpeed = 0.01; // Adjust this value as needed
+let movementSpeed = 0.005; // Adjust this value as needed
 
 // Set the closed and open positions of the doors
-var closedPositionX = 0; // Adjust this value to match the closed position
-var openPositionX = 3; // Adjust this value to match the open position
+let closedPositionX = 0; // Adjust this value to match the closed position
+let openPositionX = 3; // Adjust this value for right Door Handle
+let openPositionX2 = -3; //Adjust this value for Left Door Handle
 
 // Create an object to store the previous camera position
-var prevCameraPosition = camera.position.clone();
+let prevCameraPosition = camera.position.clone();
 
 // Create a variable to keep track of whether the door has been closed
-var doorClosed = false;
+let doorClosed = false;
 
 function checkProximityToObjectsByMaterials(materialNames) {
   // Get the camera's position
@@ -239,7 +240,7 @@ function checkProximityToObjectsByMaterials(materialNames) {
 
       // Calculate the distance between the current camera position and the object
       var currentDistance = cameraPosition.distanceTo(object.position);
-
+      
       // Check if the camera is within the proximity threshold of the object
       if (currentDistance <= proximityThreshold) {
         // Calculate the movement distance for the smooth transition based on the current distance
@@ -276,6 +277,56 @@ function checkProximityToObjectsByMaterials(materialNames) {
   prevCameraPosition.copy(cameraPosition);
 }
 
+function checkProximityToObjectsByMaterialsTwo(materialNames) {
+  // Get the camera's position
+  var cameraPosition = camera.position;
+
+  // Iterate through all objects in the scene
+  scene.traverse(function (object) {
+    // Check if the object has a material with one of the specified names
+    if (object.material && materialNames.includes(object.material.name)) {
+      // Calculate the distance between the previous camera position and the object
+      var prevDistance = prevCameraPosition.distanceTo(object.position);
+
+      // Calculate the distance between the current camera position and the object
+      var currentDistance = cameraPosition.distanceTo(object.position);
+      
+      // Check if the camera is within the proximity threshold of the object
+      if (currentDistance <= proximityThreshold) {
+        // Calculate the movement distance for the smooth transition based on the current distance
+        var movementDistance = movementSpeed * currentDistance;
+
+        // Calculate the movement direction based on the current and previous distances
+        var movementDirection = prevDistance < currentDistance ? 1.5 : -1;
+
+        // Calculate the new x position of the object
+        var newY = object.position.z + movementDirection * movementDistance;
+
+        // Clamp the new x position to be within the closed and open positions
+        newY = Math.min(Math.max(newY, openPositionX2), closedPositionX);
+
+        // If the camera is within the proximity threshold and the door was previously closed, open the door
+        if (currentDistance <= proximityThreshold && doorClosed) {
+          newY = closedPositionX;
+          doorClosed = true;
+        }
+
+        // If the camera is outside the proximity threshold, close the door
+        if (currentDistance > proximityThreshold) {
+          newY = openPositionX2;
+          doorClosed = false;
+        }
+
+        // Set the new position of the object
+        object.position.z = newY;
+      }
+    }
+  });
+
+  // Update the previous camera position for the next iteration
+  prevCameraPosition.copy(cameraPosition);
+}
+
 // Call this function in your render loop or wherever appropriate to check proximity continuously
 function checkProximityContinuously() {
   // Update the raycaster to check for intersections with objects
@@ -284,6 +335,9 @@ function checkProximityContinuously() {
   // Perform the proximity check for objects with the specified materials
   var materialsToCheck = ["Airlock Doors Right", "Right Button Lights", "Right Panels"];
   checkProximityToObjectsByMaterials(materialsToCheck);
+
+  var materialsToCheckTwo = ["Airlock Doors Left"];
+  checkProximityToObjectsByMaterialsTwo(materialsToCheckTwo);
 
   // Call this function in your render loop or appropriate event listener
   // to continuously check proximity as the camera moves
