@@ -214,22 +214,24 @@ scene.add(pointLight0);
 let proximityThreshold = 6; // Adjust this value as needed
 
 // Set the movement speed for the smooth transition
-let movementSpeed = 0.005; // Adjust this value as needed
+var movementSpeed = 0.0015; // Adjust this value as needed
 
 // Set the closed and open positions of the doors
-let closedPositionX = 0; // Adjust this value to match the closed position
-let openPositionX = 3; // Adjust this value for right Door Handle
-let openPositionX2 = -3; //Adjust this value for Left Door Handle
+let closedPositionZ = 0; // Adjust this value to match the closed position
+let openPositionZ = -3; // Adjust this value for Left Door Handle
 
 // Create an object to store the previous camera position
 let prevCameraPosition = camera.position.clone();
 
 // Create a variable to keep track of whether the door has been closed
-let doorClosed = false;
+let doorClosed = true; // Set the initial state to closed for "Airlock Doors Left"
 
-function checkProximityToObjectsByMaterials(materialNames) {
+function checkProximityToObjectsByMaterials(materialNames, invert) {
   // Get the camera's position
   var cameraPosition = camera.position;
+
+  // Track if the camera is within the proximity threshold of any object
+  var cameraWithinProximity = false;
 
   // Iterate through all objects in the scene
   scene.traverse(function (object) {
@@ -240,92 +242,125 @@ function checkProximityToObjectsByMaterials(materialNames) {
 
       // Calculate the distance between the current camera position and the object
       var currentDistance = cameraPosition.distanceTo(object.position);
-      
-      // Check if the camera is within the proximity threshold of the object
-      if (currentDistance <= proximityThreshold) {
+
+      // Check if the camera is within the proximity threshold of the object based on the invert flag
+      if ((invert && currentDistance > proximityThreshold) || (!invert && currentDistance <= proximityThreshold)) {
+        cameraWithinProximity = true;
+
         // Calculate the movement distance for the smooth transition based on the current distance
         var movementDistance = movementSpeed * currentDistance;
 
         // Calculate the movement direction based on the current and previous distances
-        var movementDirection = prevDistance < currentDistance ? 1.5 : -1;
+        var movementDirection = prevDistance < currentDistance ? -1 : 1;
 
-        // Calculate the new x position of the object
-        var newX = object.position.x + movementDirection * movementDistance;
+        // Calculate the new z position of the object
+        var newZ = object.position.z + movementDirection * movementDistance;
 
-        // Clamp the new x position to be within the closed and open positions
-        newX = Math.min(Math.max(newX, closedPositionX), openPositionX);
+        // Clamp the new z position to be within the closed and open positions
+        newZ = Math.min(Math.max(newZ, openPositionZ), closedPositionZ);
 
-        // If the camera is within the proximity threshold and the door was previously closed, open the door
-        if (currentDistance <= proximityThreshold && doorClosed) {
-          newX = openPositionX;
+        // If the camera is outside the proximity threshold, close the door
+        if (doorClosed && !invert) {
+          newZ = closedPositionZ;
           doorClosed = false;
         }
 
-        // If the camera is outside the proximity threshold, close the door
-        if (currentDistance > proximityThreshold) {
-          newX = closedPositionX;
-          doorClosed = true;
-        }
-
         // Set the new position of the object
-        object.position.x = newX;
+        object.position.z = newZ;
       }
     }
   });
 
+  // If the camera is no longer within the proximity threshold of any object, keep the door open
+  if (!cameraWithinProximity && !doorClosed && invert) {
+    doorClosed = true;
+  }
+
   // Update the previous camera position for the next iteration
   prevCameraPosition.copy(cameraPosition);
 }
+
+
+
+// Set the proximity threshold for triggering the action
+let threshold = 6; // Adjust this value as needed
+
+// Set the movement speed for the smooth transition
+let speed = 0.01; // Adjust this value as needed
+
+// Set the closed and open positions of the doors
+let closedX = 0; // Adjust this value to match the closed position
+let openX = 3; // Adjust this value for right Door Handle
+
+// Create an object to store the previous camera position
+let prevPos = camera.position.clone();
+
+// Create a variable to keep track of whether the door has been closed
+let doorClosed2 = false;
 
 function checkProximityToObjectsByMaterialsTwo(materialNames) {
-  // Get the camera's position
-  var cameraPosition = camera.position;
+// Get the camera's position
+var camPos = camera.position;
 
-  // Iterate through all objects in the scene
-  scene.traverse(function (object) {
-    // Check if the object has a material with one of the specified names
-    if (object.material && materialNames.includes(object.material.name)) {
-      // Calculate the distance between the previous camera position and the object
-      var prevDistance = prevCameraPosition.distanceTo(object.position);
+// Iterate through all objects in the scene
+scene.traverse(function (object) {
+// Check if the object has a material with one of the specified names
+if (object.material && materialNames.includes(object.material.name)) {
+// Calculate the distance between the previous camera position and the object
+var prevDist = prevPos.distanceTo(object.position);
 
-      // Calculate the distance between the current camera position and the object
-      var currentDistance = cameraPosition.distanceTo(object.position);
-      
-      // Check if the camera is within the proximity threshold of the object
-      if (currentDistance <= proximityThreshold) {
-        // Calculate the movement distance for the smooth transition based on the current distance
-        var movementDistance = movementSpeed * currentDistance;
+  // Calculate the distance between the current camera position and the object
+  var currentDist = camPos.distanceTo(object.position);
+  
+  // Check if the camera is within the proximity threshold of the object
+  if (currentDist <= threshold) {
+    // Calculate the movement distance for the smooth transition based on the current distance
+    var moveDist = speed * currentDist;
 
-        // Calculate the movement direction based on the current and previous distances
-        var movementDirection = prevDistance < currentDistance ? 1.5 : -1;
+    // Calculate the movement direction based on the current and previous distances
+    var moveDirection = prevDist < currentDist ? 1.1 : -1;
 
-        // Calculate the new x position of the object
-        var newY = object.position.z + movementDirection * movementDistance;
+    // Calculate the new x position of the object
+    var newX = object.position.x + moveDirection * moveDist;
 
-        // Clamp the new x position to be within the closed and open positions
-        newY = Math.min(Math.max(newY, openPositionX2), closedPositionX);
+    // Clamp the new x position to be within the closed and open positions
+    newX = Math.min(Math.max(newX, closedX), openX);
 
-        // If the camera is within the proximity threshold and the door was previously closed, open the door
-        if (currentDistance <= proximityThreshold && doorClosed) {
-          newY = closedPositionX;
-          doorClosed = true;
-        }
-
-        // If the camera is outside the proximity threshold, close the door
-        if (currentDistance > proximityThreshold) {
-          newY = openPositionX2;
-          doorClosed = false;
-        }
-
-        // Set the new position of the object
-        object.position.z = newY;
-      }
+    // If the camera is within the proximity threshold and the door was previously closed, open the door
+    if (currentDist <= threshold && doorClosed2) {
+      newX = openX;
+      doorClosed2 = false;
     }
-  });
 
-  // Update the previous camera position for the next iteration
-  prevCameraPosition.copy(cameraPosition);
+    // If the camera is outside the proximity threshold, close the door
+    if (currentDist > threshold) {
+      newX = closedX;
+      doorClosed2 = true;
+    }
+
+    // Set the new position of the object
+    object.position.x = newX;
+  }
 }
+});
+
+// Update the previous camera position for the next iteration
+prevPos.copy(camPos);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // Call this function in your render loop or wherever appropriate to check proximity continuously
 function checkProximityContinuously() {
@@ -333,10 +368,11 @@ function checkProximityContinuously() {
   raycaster.setFromCamera(new THREE.Vector2(0, 0), camera);
 
   // Perform the proximity check for objects with the specified materials
-  var materialsToCheck = ["Airlock Doors Right", "Right Button Lights", "Right Panels"];
-  checkProximityToObjectsByMaterials(materialsToCheck);
+  var materialsToCheck = ["Airlock Doors Left"];
+  checkProximityToObjectsByMaterials(materialsToCheck, true);
 
-  var materialsToCheckTwo = ["Airlock Doors Left"];
+  // Perform the proximity check for objects with the specified materials
+  var materialsToCheckTwo = ["Airlock Doors Right", "Right Button Lights", "Right Panels"];
   checkProximityToObjectsByMaterialsTwo(materialsToCheckTwo);
 
   // Call this function in your render loop or appropriate event listener
@@ -346,6 +382,9 @@ function checkProximityContinuously() {
 
 // Start checking proximity continuously
 checkProximityContinuously();
+
+
+
 
 
 
