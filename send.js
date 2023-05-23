@@ -34,25 +34,14 @@ const loadingTexts = [
   }
   
   setInterval(changeLoadingText, 5000);
-
-
-
-
-
-
-
-
-
-  // Get the button element by its ID
-const button = document.getElementById('english');
-
-// Add a click event listener to the button
-button.addEventListener('click', function() {
-  // Redirect to the specified href
-  window.location.href = 'Loading_engelsk.html';
-});
-
-
-
  
  
+ 
+ // Get the button element by its ID
+ const send = document.getElementById('unit');
+
+ // Add a click event listener to the button
+ send.addEventListener('click', function() {
+   // Redirect to the specified href
+   window.location.href = '3D_English.html';
+ });
