@@ -34,5 +34,3 @@ const loadingTexts = [
   }
   
   setInterval(changeLoadingText, 5000);
-
-  

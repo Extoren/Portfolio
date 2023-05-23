@@ -1,3 +1,8 @@
+* {
+  background-color: black;
+  color: white;
+}
+
 .loading-container {
   display: flex;
   flex-direction: column;
@@ -9,8 +14,8 @@
 .spinner {
   width: 60px;
   height: 60px;
-  border: 5px solid #ccc;
-  border-top-color: #ddff00;
+  border: 5px solid rgb(112, 112, 112);
+  border-top-color: yellow;
   border-radius: 50%;
   animation: spin 1s infinite linear;
 }
@@ -30,6 +35,12 @@
 .loading-text {
   margin-top: 10px;
   white-space: pre-line;
+  color: white;
+}
+
+.choose-portfolio {
+  color: white;
+  text-align: center;
 }
 
 #portfolio-container {
@@ -60,7 +71,7 @@
 .box {
     width: 150px;
     height: 90px;
-    background-color: #606060;
+    background-color: rgb(55, 54, 54);
     margin: 0 10px;
     display: flex;
     flex-direction: column;
@@ -82,14 +93,20 @@
   }
   
   .box-text {
-    font-size: 24pt;
+    font-size: 20pt;
   }
 
   #yellow {
     color: yellow;
+    background: none;
+  }
+
+  #size {
+    font-size: 25pt;
   }
   
   .box-subtext {
+    background: none;
     color: white;
     font-size: 16px;
     margin-top: 5px;
