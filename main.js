@@ -554,30 +554,6 @@ function lockPointer() {
     }
   }
   
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-
-
-
 
 
 
@@ -642,11 +618,5 @@ forward.addEventListener("click", () => {
   popup003.style.display = "block";
   overlay.classList.remove("active");
 });
-
-
-
-
-
-
 
 
