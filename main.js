@@ -139,20 +139,86 @@ function onDocumentMouseDown(event) {
         // Exit pointer lock
         document.exitPointerLock();
       }
+    } else if (intersect.object.material.name === 'Portfolio 1') {
+      overlay.style.display = 'block';
+      document.getElementById('popup-material-1').style.display = 'block';
+      setTimeout(function() {
+        overlay.style.transform = 'translate(-50%, -50%) scale(1)';
+      }, 10);
+      // Check if pointer lock is active
+      if (document.pointerLockElement !== null) {
+        // Exit pointer lock
+        document.exitPointerLock();
+      }
+    } else if (intersect.object.material.name === '2d-character-controller') {
+      overlay.style.display = 'block';
+      document.getElementById('popup-material-2').style.display = 'block';
+      setTimeout(function() {
+        overlay.style.transform = 'translate(-50%, -50%) scale(1)';
+      }, 10);
+      // Check if pointer lock is active
+      if (document.pointerLockElement !== null) {
+        // Exit pointer lock
+        document.exitPointerLock();
+      } 
+    } else if (intersect.object.material.name === 'Oslo') {
+      overlay.style.display = 'block';
+      document.getElementById('popup-material-3').style.display = 'block';
+      setTimeout(function() {
+        overlay.style.transform = 'translate(-50%, -50%) scale(1)';
+      }, 10);
+      // Check if pointer lock is active
+      if (document.pointerLockElement !== null) {
+        // Exit pointer lock
+        document.exitPointerLock();
+      }
+    } else if (intersect.object.material.name === 'Lego') {
+      overlay.style.display = 'block';
+      document.getElementById('popup-material-4').style.display = 'block';
+      setTimeout(function() {
+        overlay.style.transform = 'translate(-50%, -50%) scale(1)';
+      }, 10);
+      // Check if pointer lock is active
+      if (document.pointerLockElement !== null) {
+        // Exit pointer lock
+        document.exitPointerLock();
+      }
+    } else if (intersect.object.material.name === 'CV') {
+      overlay.style.display = 'block';
+      document.getElementById('popup-material-5').style.display = 'block';
+      setTimeout(function() {
+        overlay.style.transform = 'translate(-50%, -50%) scale(1)';
+      }, 10);
+      // Check if pointer lock is active
+      if (document.pointerLockElement !== null) {
+        // Exit pointer lock
+        document.exitPointerLock();
+      }
     }
   });
 }
+
 
 
 document.addEventListener('mousedown', function(event) {
   const isInsidePopup003 = event.target.closest('#popup-material-003') !== null;
   const isInsidePopup004 = event.target.closest('#popup-material-0031') !== null;
   const isInsidePopup005 = event.target.closest('#popup-material-0032') !== null;
-  if (!isInsidePopup003 && !isInsidePopup004 && !isInsidePopup005) {
+  const isInsidePopup006 = event.target.closest('#popup-material-1') !== null;
+  const isInsidePopup007 = event.target.closest('#popup-material-2') !== null;
+  const isInsidePopup008 = event.target.closest('#popup-material-3') !== null;
+  const isInsidePopup009 = event.target.closest('#popup-material-4') !== null;
+  const isInsidePopup010 = event.target.closest('#popup-material-5') !== null;
+  if (!isInsidePopup003 && !isInsidePopup004 && !isInsidePopup005 && !isInsidePopup006 && !isInsidePopup007 && !isInsidePopup008 && !isInsidePopup009 && !isInsidePopup010) {
     overlay.style.display = 'none';
     document.getElementById('popup-material-003').style.display = 'none';
     document.getElementById('popup-material-0031').style.display = 'none';
     document.getElementById('popup-material-0032').style.display = 'none';
+    document.getElementById('popup-material-1').style.display = 'none';
+    document.getElementById('popup-material-2').style.display = 'none';
+    document.getElementById('popup-material-3').style.display = 'none';
+    document.getElementById('popup-material-4').style.display = 'none';
+    document.getElementById('popup-material-5').style.display = 'none';
     overlay.style.transform = 'translate(-50%, -50%) scale(0.1)';
   }
 });
@@ -182,12 +248,16 @@ var pointLight2 = new THREE.PointLight(0xffffff, 0.5);
 pointLight2.position.set(6, 2, 0);
 scene.add(pointLight2);
 
-var pointLight0 = new THREE.PointLight(0xffffff, 1);
+var pointLight0 = new THREE.PointLight(0xffffff, 1.5);
 pointLight0.position.set(10, 2, 0);
 scene.add(pointLight0);
 
-var pointLight0 = new THREE.PointLight(0xffffff, 1);
+var pointLight0 = new THREE.PointLight(0xffffff, 1.5);
 pointLight0.position.set(14, 2, 0);
+scene.add(pointLight0);
+
+var pointLight0 = new THREE.PointLight(0xffffff, 1.5);
+pointLight0.position.set(18, 2, 0);
 scene.add(pointLight0);
 
 var pointLight0 = new THREE.PointLight(0xffffff, 0.5);
@@ -283,21 +353,13 @@ prevPos.copy(camPos);
 
 
 
-
-
-
-
-
-
-
-
 // Call this function in your render loop or wherever appropriate to check proximity continuously
 function checkProximityContinuously() {
   // Update the raycaster to check for intersections with objects
   raycaster.setFromCamera(new THREE.Vector2(0, 0), camera);
 
   // Perform the proximity check for objects with the specified materials
-  var materialsToCheckTwo = ["Airlock Doors Right", "Right Button Lights", "Right Panels"];
+  var materialsToCheckTwo = ["Airlock Doors Right", "Right Button Lights", "Right Panels", "Airlock Doors", "Panels", "Left Button Lights"];
   checkProximityToObjectsByMaterialsTwo(materialsToCheckTwo);
 
   // Call this function in your render loop or appropriate event listener
@@ -307,6 +369,21 @@ function checkProximityContinuously() {
 
 // Start checking proximity continuously
 checkProximityContinuously();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -513,24 +590,40 @@ lockPointer ();
 const popup003 = document.getElementById("popup-material-003");
 const popup0031 = document.getElementById("popup-material-0032");
 const popup0032 = document.getElementById("popup-material-0031");
+const popup1 = document.getElementById("popup-material-1");
+const popup2 = document.getElementById("popup-material-2");
+const popup3 = document.getElementById("popup-material-3");
+const popup4 = document.getElementById("popup-material-4");
 const arrowLeft = document.querySelector(".arrow-left");
 const arrowRight = document.querySelector(".arrow-right");
 const back = document.getElementById("back");
 const forward = document.getElementById("forward");
 
 arrowLeft.addEventListener("click", () => {
+  popup1.style.display = "none"; 
+  popup2.style.display = "none"; 
+  popup3.style.display = "none"; 
+  popup4.style.display = "none"; 
   popup003.style.display = "none";
   popup0032.style.display = "block";
   overlay.classList.add("active");
 });
 
 arrowRight.addEventListener("click", () => {
+  popup1.style.display = "none"; 
+  popup2.style.display = "none"; 
+  popup3.style.display = "none"; 
+  popup4.style.display = "none"; 
   popup003.style.display = "none";
   popup0031.style.display = "block";
   overlay.classList.add("active");
 });
 
 back.addEventListener("click", () => {
+  popup1.style.display = "none";
+  popup2.style.display = "none"; 
+  popup3.style.display = "none"; 
+  popup4.style.display = "none"; 
   popup0032.style.display = "none";
   popup0031.style.display = "none";
   popup003.style.display = "block";
@@ -538,6 +631,10 @@ back.addEventListener("click", () => {
 });
 
 forward.addEventListener("click", () => {
+  popup1.style.display = "none";
+  popup2.style.display = "none"; 
+  popup3.style.display = "none"; 
+  popup4.style.display = "none"; 
   popup0031.style.display = "none";
   popup0032.style.display = "none";
   popup003.style.display = "block";
