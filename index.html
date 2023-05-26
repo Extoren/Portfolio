@@ -4,234 +4,32 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/build/three.min.js"></script>
-    <script src="https://threejs.org/examples/js/loaders/ColladaLoader.js"></script>
-    <title>Porfolio 2.0</title>
-    <style>
-        body {
-          margin: 0;
-          overflow: hidden;
-        }
-        canvas {
-          display: block;
-        }
-        #custom-crosshair {
-          position: fixed;
-          top: 50%;
-          left: 50%;
-          transform: translate(-50%, -50%);
-          width: 20px;
-          height: 20px;
-          pointer-events: none;
-        }
-
-        #custom-crosshair #custom-circle {
-          position: absolute;
-          top: 50%;
-          left: 50%;
-          transform: translate(-50%, -50%);
-          width: 12px;
-          height: 12px;
-          border-radius: 50%;
-          border: 3px solid yellow;
-          
-          pointer-events: auto;
-        }
-        #overlay {
-          position: fixed;
-          top: 50%;
-          left: 50%;
-          transform: translate(-50%, -50%) scale(0.1);
-          transform-origin: center center;
-          width: 1500px;
-          height: 700px;
-          background-color: rgb(20, 20, 20);
-          z-index: 100;
-          display: none;
-          opacity: 1;
-          border-radius: 5px;
-          border: 5px solid yellow;
-          transition: all 0.3s ease-out;
-        }
-        @media (max-width: 500px) {
-            #overlay {
-              width: 400px;
-              height:700px;
-            }
-        }
-        @media (min-width: 530px) {
-            #overlay {
-              width: 450px;
-              height:700px;
-            }
-        }
-        @media (min-width: 550px) {
-            #overlay {
-              width: 450px;
-              height:700px;
-            }
-        }
-        @media (min-width: 600px) {
-            #overlay {
-              width: 500px;
-              height:700px;
-            }
-        }
-        @media (min-width: 800px) {
-            #overlay {
-              width: 600px;
-              height:700px;
-            }
-        }
-        @media (min-width: 900px) {
-            #overlay {
-              width: 800px;
-              height:700px;
-            }
-        }
-        @media (min-width:1200px){  
-          #overlay {
-            width:1200px;
-            height:600px;
-          }
-        }
-        h1 {
-          color: white;
-          font-size: 15pt;
-          text-align: center;
-          font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
-        }
-        h2 {
-          color: yellow;
-          font-size: 100pt;
-          text-align: center;
-          font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
-        }
-        p {
-          color: yellow;
-          font-size: 65pt;
-          text-align: center;
-          font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
-        }
-        #yellow {
-          color: yellow;
-        }
-        .close-btn {
-          position: absolute;
-          top: -100px;
-          left: 30px;
-          font-size: 40pt;
-          background-color: transparent;
-          border: none;
-          color: yellow;
-          cursor: pointer;
-        }
-
-        #popup-material-003 {
-          position: relative;
-        }
-        #control {
-          top: 10px;
-        }
-        #smallerT {
-          font-size: 40pt;
-        }
-        #smallerH {
-          font-size: 65pt;
-        }
-        .arrow-left,
-        .arrow-right {
-          position: absolute;
-          top: 50%;
-          width: 40px;
-          height: 80px;
-          margin-top: -10px;
-          background-color: yellow;
-          z-index: 1;
-        }
-        .arrow-left {
-          left: 10px;
-          clip-path: polygon(100% 0, 0 50%, 100% 100%);
-        }
-
-        .arrow-right {
-          right: 10px;
-          clip-path: polygon(0 0, 100% 50%, 0 100%);
-        }
-      </style>
+    <link rel="stylesheet" href="style.css">
+    <title>Language</title>
 </head>
 <body>
-  <div id="custom-crosshair">
-    <div id="custom-circle"></div>
+  <div class="loading-container">
+    <div class="spinner"></div>
+    <div id="loading-text">Loading Selections Menu</div>
   </div>
-  <div id="overlay">
-    <div id="popup-material-003">
-      <button class="close-btn">x</button>
-      <div class="arrow-left"></div>
-      <div class="arrow-right"></div>
-      <h2>Born</h2>
-      <p>2006</p>
-    </div>
-    
-    <div id="popup-material-0031">
-      <button class="close-btn" id="control">x</button>
-      <div class="arrow-right" id="forward"></div>
-      <h2 id="smallerH">Studying</h2>
-      <p id="smallerT">Information-technology <br>
-        and media-production.</p>
-    </div>
 
-    <div id="popup-material-0032">
-      <button class="close-btn" id="control">x</button>
-      <div class="arrow-left" id="back"></div>
-      <h2 id="smallerH">Location</h2>
-      <p>Norway, Oslo</p>
+  <div id="portfolio-container" class="hidden">
+    <div class="choose-portfolio">
+      <span id="yellow">Velg Språk</span> <br>
+      <span id="size">Choose Language</span>
     </div>
+    <div class="box-container">
+      <button class="box" id="english">
+        <span class="box-text" id="yellow">Engelsk</span>
+        <span class="box-subtext">English</span>
+      </button>
+      <button class="box" id="norsk">
+        <span class="box-text" id="yellow">Norsk</span>
+        <span class="box-subtext">Norwegian</span>
+      </button>
+    </div>
+  </div>
 
-    <div id="popup-material-1">
-      <button class="close-btn" id="control">x</button>
-      <h2 id="smallerH">Portfolio 1.0</h2>
-      <div style="display: flex; justify-content: center;" >
-        <button id="smallerT" onclick="window.open('https://portfoliomax.z1.web.core.windows.net/index_English.html', '_blank')">Click me!</button>
-      </div>      
-    </div>
-
-    <div id="popup-material-2">
-      <button class="close-btn" id="control">x</button>
-      <h2 id="smallerH">2D Platformer</h2>
-      <div style="display: flex; justify-content: center;">
-        <button id="smallerT" onclick="window.open('https://extoren.itch.io/2d-platformer', '_blank')">Click me!</button>
-      </div>      
-    </div>
-
-    <div id="popup-material-3">
-      <button class="close-btn" id="control">x</button>
-      <h2 id="smallerH">Oslo Skatehall</h2>
-      <div style="display: flex; justify-content: center;">
-        <button id="smallerT" onclick="window.open('https://portfoliomax.z1.web.core.windows.net/Blender%20Design.html', '_blank')">Click me!</button>
-      </div>      
-    </div>
-
-    <div id="popup-material-4">
-      <button class="close-btn" id="control">x</button>
-      <h2 id="smallerH">SoundDesign</h2>
-      <div style="display: flex; justify-content: center;">
-        <button id="smallerT" onclick="window.open('https://portfoliomax.z1.web.core.windows.net/Lyddesign_Max_1IMC.mp4', '_blank')">Click me!</button>
-      </div>      
-    </div>
-
-    <div id="popup-material-5">
-      <button class="close-btn" id="control">x</button>
-      <h2 id="smallerH">CV</h2>
-      <div style="display: flex; justify-content: center;">
-        <button id="smallerT" onclick="window.open('https://portfoliomax.z1.web.core.windows.net/CV.pdf', '_blank')">Click me!</button>
-      </div>      
-    </div>
-  </div>  
-  <div id="container"></div>
-    <script src="https://cdn.rawgit.com/mrdoob/three.js/r118/build/three.min.js"></script>
-    <script src="https://cdn.rawgit.com/mrdoob/three.js/r118/examples/js/loaders/GLTFLoader.js"></script>
-    <script src="main.js"></script> 
-    <canvas id="canvas"></canvas>
+    <script src="loading.js"></script> 
 </body>
 </html>

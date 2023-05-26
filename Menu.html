@@ -9,7 +9,14 @@
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
+            background-color: black;
         }
+
+        h1 {
+            text-align: center;
+            color: white;
+        }
+
 
         .container {
             display: flex;
@@ -17,6 +24,7 @@
             justify-content: center;
             height: 100vh;
             background-color: #f2f2f2;
+            background: black;
         }
 
         .keyboard {
@@ -34,8 +42,8 @@
         .key {
             width: 80px;
             height: 80px;
-            background-color: #f2f2f2;
-            border: 1px solid #ccc;
+            background-color: yellow;
+            border: 1px solid black;
             display: inline-block;
             text-align: center;
             line-height: 80px;
@@ -53,8 +61,8 @@
             border-top-right-radius: 40%;
             width: 50px;
             height: 100px;
-            background-color: #f2f2f2;
-            border: 1px solid #ccc;
+            background-color: yellow;
+            border: 1px solid black;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -64,8 +72,8 @@
         .click {
             width: 20px;
             height: 40px;
-            background-color: #fff;
-            border: 1px solid #ccc;
+            background-color: rgb(255, 255, 255);
+            border: 1px solid black;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -79,10 +87,29 @@
         #right {
             border-top-right-radius: 40%;
         }
+
+        .yellow-circle {
+            color: yellow;
+        }
+        
+        .next-button {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 10px 20px;
+            background-color: yellow;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            color: black;
+            cursor: pointer;
+        }
     </style>
     <title>Mousepad</title>
 </head>
 <body>
+    <h1>press the <span class="yellow-circle">yellow circle</span> in the center to move with the mouse</h1>
     <div class="container">
         <div class="keyboard">
             <div class="row">
@@ -99,7 +126,7 @@
             <div class="click" id="right" onclick="handleRightClick()">&#x25CB;</div>
         </div>
     </div>
-
-    <script src=".js"></script>
+    
+    <a href="Portfolio.html" class="next-button">Begin</a>
 </body>
 </html>

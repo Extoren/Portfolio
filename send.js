@@ -18,7 +18,7 @@ const loadingTexts = [
     const loadingText = document.getElementById('loading-text');
     loadingText.textContent = '';
     const currentText = loadingTexts[currentIndex];
-    typeWriter(currentText, 0, 100);
+    typeWriter(currentText, 0, 70);
   
     currentIndex = (currentIndex + 1) % loadingTexts.length;
   
